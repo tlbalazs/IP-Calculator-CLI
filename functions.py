@@ -17,6 +17,30 @@ def check_input(input):
     return True
 
 
+def check_ip_class(host_address):
+    ip_class = ""
+    first_octet = int(host_address[0])
+    if 1 <= first_octet <= 126:
+        ip_class = "A"
+    elif 128 <= first_octet <= 191:
+        ip_class = "B"
+    elif 192 <= first_octet <= 223:
+        ip_class = "C"
+    elif 224 <= first_octet <= 239:
+        ip_class = "D"
+    return ip_class
+
+
+def check_private_network(host_address):
+    match '.'.join(host_address[:2]):
+        case "10.0":
+            return True
+        case "172.16":
+            return True
+        case '192.168':
+            return True
+        case _: return False
+
 def decimal_to_binary(octets):
     octets_bin = []
     for octet in octets:
@@ -71,3 +95,7 @@ def calculate_last_address(broadcast):
     last_address = broadcast.copy()
     last_address[3] = last_address[3] - 1
     return last_address
+
+
+def calculate_max_hosts(prefix):
+    return pow(2, 32 - prefix) - 2
