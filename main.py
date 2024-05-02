@@ -1,8 +1,15 @@
 import functions
 
-input_address = input("Host Address and netmask: ")
-host_address = input_address.split("/")[0].split(".")
-prefix = int(input_address.split("/")[1])
+while True:
+    try:
+        input_address = input("Host Address and netmask: ")
+        if functions.check_input(input_address):
+            host_address = input_address.split("/")[0].split(".")
+            prefix = int(input_address.split("/")[1])
+            break
+    except ValueError as e:
+        print("An error occurred while checking the input parameter:", e)
+
 
 netmask = functions.calculate_netmask(prefix)
 wildcard = functions.calculate_wildcard_mask(netmask)

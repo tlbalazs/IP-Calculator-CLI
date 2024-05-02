@@ -1,4 +1,21 @@
 import array
+import re
+
+
+def check_input(input):
+    ip_regex = r"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+    prefix_regex = r"\/(3[0-2]|[12]?[0-9])\b"
+    ip_is_valid = re.match(ip_regex, input.split("/")[0])
+    prefix_is_valid = re.match(prefix_regex, input[-3:])
+
+    if not ip_is_valid:
+        raise ValueError("Wrong or missing IP parameter. "
+                         "You must follow the IP address dotted-decimal format, such as 192.168.123.234/24!")
+    if not prefix_is_valid:
+        raise ValueError("Wrong or missing IP parameter. "
+                         "You must follow the IP address dotted-decimal format, such as 192.168.123.234/24!")
+    return True
+
 
 def decimal_to_binary(octets):
     octets_bin = []
