@@ -1,31 +1,37 @@
 import functions
 
-host_address = input("Host Address: ")
-ha_octets = host_address.split("/")[0].split(".")
-prefix = int(host_address.split("/")[1])
+input_address = input("Host Address and netmask: ")
+host_address = input_address.split("/")[0].split(".")
+prefix = int(input_address.split("/")[1])
 
-ha_octets_bin = functions.DecimalToBinary(ha_octets)
-print("Host address:", '.'.join(ha_octets))
-print("Host address bin:", '.'.join(ha_octets_bin))
+netmask = functions.calculate_netmask(prefix)
+wildcard = functions.calculate_wildcard_mask(netmask)
+network_address = functions.calculate_hostid(host_address, netmask)
+first_address = functions.calculate_first_address(network_address)
+broadcast = functions.calculate_broadcast_address(network_address, wildcard)
+last_address = functions.calculate_last_address(broadcast)
+host_address_binary = functions.decimal_to_binary(host_address)
 
-# mask = ["255" if i < prefix // 8 else "0" for i in range(4)]
-# mask[3] = str(256 - 2**(prefix % 8))
-# netmask = ".".join(mask)
+netmask_binary = functions.decimal_to_binary(netmask)
+network_address_binary = functions.decimal_to_binary(network_address)
+first_address_binary = functions.decimal_to_binary(first_address)
+last_address_binary = functions.decimal_to_binary(last_address)
+broadcast_binary = functions.decimal_to_binary(broadcast)
+wildcard_binary = functions.decimal_to_binary(wildcard)
 
-# mask = []
-# for index in range(4):
-#     if index < prefix // 8:
-#         mask.append(255)
-#     else:
-#         mask.append(256 - pow(2,8 - (prefix % 8)))
-#         prefix = 0
+print("Host address:", '.'.join(host_address))
+print("Netmask:", '.'.join(str(x) for x in netmask))
+print("Wildcard:", '.'.join(str(x) for x in wildcard))
+print("Network address:", '.'.join(str(x) for x in network_address))
+print("First available address:", '.'.join(str(x) for x in first_address))
+print("Last available address:", '.'.join(str(x) for x in last_address))
+print("Broadcast address:", '.'.join(str(x) for x in broadcast))
 
-# mask = [0, 0, 0, 0]
-# for i in range(prefix):
-#     mask[i // 8] += 1 << (7 - i % 8)
+print("Binary host address:", '.'.join(host_address_binary))
+print("Binary netmask:", '.'.join(netmask_binary))
+print("Wildcard binary:", '.'.join(wildcard_binary))
+print("Binary network address:", '.'.join(network_address_binary))
+print("First available address:", '.'.join(first_address_binary))
+print("Last available address:", '.'.join(last_address_binary))
+print("Broadcast address:", '.'.join(broadcast_binary))
 
-mask = []
-for index in range(4):
-    mask.append(256 - pow(2,8 - (prefix % 8)))
-
-print(mask)
