@@ -89,12 +89,24 @@ def decimal_to_binary(octets):
 
 
 def calculate_netmask(prefix):
+    """
+    Calculates the netmask value based on the given prefix.
+
+    Args:
+        prefix (int): The prefix length.
+
+    Returns:
+        list: The netmask value as a list of four octets.
+    """
     mask = []
     for index in range(4):
+        # Determine the value for the current octet based on the prefix
         if index < prefix // 8:
             mask.append(255)
         else:
+            # Calculate the value for the remaining bits in the current octet
             mask.append(256 - pow(2,8 - (prefix % 8)))
+            # Reset prefix to zero for the remaining octets
             prefix = 0
     return mask
 
