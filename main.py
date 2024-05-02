@@ -1,21 +1,22 @@
 import functions
 
+print("Add a IPv4 CIDR Block, i.e., a.b.c.d/n")
 while True:
     try:
-        input_address = input("Host Address and netmask: ")
-        if functions.check_input(input_address):
-            host_address = input_address.split("/")[0].split(".")
-            prefix = int(input_address.split("/")[1])
+        cidr_block = input("Host Address and netmask: ")
+        if functions.check_input(cidr_block):
+            host_address = cidr_block.split("/")[0].split(".")
+            prefix = int(cidr_block.split("/")[1])
             break
     except ValueError as e:
         print("An error occurred while checking the input parameter:", e)
 
 
 ip_class = functions.check_ip_class(host_address)
-is_private_network = functions.check_private_network(host_address)
+is_private_network = functions.check_private_network(host_address, prefix)
 netmask = functions.calculate_netmask(prefix)
 wildcard = functions.calculate_wildcard_mask(netmask)
-network_address = functions.calculate_hostid(host_address, netmask)
+network_address = functions.calculate_network_address(host_address, netmask)
 first_address = functions.calculate_first_address(network_address)
 broadcast = functions.calculate_broadcast_address(network_address, wildcard)
 last_address = functions.calculate_last_address(broadcast)
